@@ -36,12 +36,25 @@ public class TestView : ContentPage
                     new Label
                     {
 
-                    }.Bind(Label.TextProperty, getter: static (TestModel myModel) => myModel.NestedObject.Test),
+                    }.Bind(Label.TextProperty, 
+                            static (TestModel myModel) => myModel.NestedObject.Test,
+                            new (Func<TestModel, object?>, string)[]
+                            {
+                                (vm => vm, nameof(TestModel.NestedObject)),
+                                (vm => vm.NestedObject, nameof(TestModel.NestedObject.Test)),
+                            }),
 
 					new Entry
                     {
 
-                    }.Bind(Entry.TextProperty, static (TestModel model) => model.NestedObject.Test, (TestModel model, string value) => model.NestedObject.Test = value),
+                    }.Bind(Entry.TextProperty, 
+                            static (TestModel model) => model.NestedObject.Test, 
+                            new (Func<TestModel, object?>, string)[]
+                            {
+                                (vm => vm, nameof(TestModel.NestedObject)),
+                                (vm => vm.NestedObject, nameof(TestModel.NestedObject.Test)),
+                            },
+                            (TestModel model, string value) => model.NestedObject.Test = value),
 
                 }
             }
